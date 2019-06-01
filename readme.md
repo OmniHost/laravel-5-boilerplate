@@ -55,3 +55,6 @@ MIT: [http://anthony.mit-license.org](http://anthony.mit-license.org)
 ##Customisation / Setup for this version
 
 1) - We installed jQuery Validate for the backend -> https://github.com/rappasoft/laravel-5-boilerplate/pull/1242
+2) - We add Repository Builder -> https://github.com/rappasoft/laravel-5-boilerplate/pull/1239/files
+3) - We added additional package for building our own packages as seperate repo's: https://github.com/melihovv/laravel-package-generator
+4)  - Added Our Api Package - https://github.com/phpsa/laravel-api-controller
