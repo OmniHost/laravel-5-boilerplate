@@ -14,6 +14,7 @@
         "arcanedev/log-viewer": "^4.7",
         "beyondcode/laravel-self-diagnosis": "^1.0",
         "creativeorange/gravatar": "~1.0",
+        "cviebrock/eloquent-sluggable": "^4.8",
         "davejamesmiller/laravel-breadcrumbs": "^5.0",
         "divineomega/laravel-password-exposed-validation-rule": "^2.0.1",
         "fideloper/proxy": "^4.0",
