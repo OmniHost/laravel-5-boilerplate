@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Auth\Traits\SendUserPasswordReset;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableInterface;
+use Laravel\Passport\HasApiTokens;
 
 /**
  * Class User.
@@ -20,7 +21,8 @@ class BaseUser extends Authenticatable implements AuditableInterface
         HasRoles,
         Notifiable,
         SendUserPasswordReset,
-        SoftDeletes,
+		SoftDeletes,
+		HasApiTokens,
         Uuid;
 
     /**
