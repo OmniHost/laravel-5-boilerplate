@@ -24,6 +24,14 @@ class RadiostationContests extends Model
 		]
 	];
 
+	    /**
+     * @var array
+     */
+    protected $dates = [
+        'start',
+        'end',
+    ];
+
 
 
 	protected $attributes = [
