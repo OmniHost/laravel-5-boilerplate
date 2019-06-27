@@ -4,7 +4,8 @@ use Phpsa\LaravelApiController\Http\Api\Controller;
 use App\Models\RadiostationContests;
 use App\Repositories\Api\radiostation_contestsRepository;
 use Twilio;
-use Twilio\TwiML;
+use Twilio\Twiml as TwiML;
+use Illuminate\Support\Facades\Log;
 
 class radiostation_contestsController extends Controller
 {
@@ -33,7 +34,8 @@ class radiostation_contestsController extends Controller
 	}
 
 
-	public function show($id){
+	public function incommingCall($id){
+		Log::info(print_r($_POST,1));
 		try {
 			$item = $this->repository->getById($id);
 		}catch(\Exception $e){

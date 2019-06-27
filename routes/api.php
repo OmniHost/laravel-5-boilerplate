@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 
+use App\Http\Controllers\Api\radiostation_contestsController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,4 +18,6 @@ use Illuminate\Http\Request;
 /*Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });*/
-Route::resource('radiostation_contests', 'Api\\radiostation_contestsController');
+//Route::resource('radiostation_contests', 'Api\\radiostation_contestsController');
+
+Route::post('radiostation_contests/{id}', [radiostation_contestsController::class, 'incommingCall']);
