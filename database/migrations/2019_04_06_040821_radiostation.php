@@ -47,6 +47,7 @@ class Radiostation extends Migration
 			$table->bigIncrements('id');
 			$table->string('name');
 			$table->string('slug');
+			$table->text('message')->nullable();
 			$table->dateTime('start');
 			$table->dateTime('end');
 			$table->boolean('enabled');

@@ -34,6 +34,18 @@
                                 ->required()
                                 ->autofocus() }}
                         </div><!--col-->
+					</div><!--form-group-->
+
+					<div class="form-group row">
+                        {{ html()->label('Contest Call Recording')
+                            ->class('col-md-2 form-control-label')
+                            ->for('message') }}
+
+                        <div class="col-md-10">
+                            {{ html()->textarea('message')
+                                ->class('form-control')
+                                ->required() }}
+                        </div><!--col-->
                     </div><!--form-group-->
 
 					<div class="form-group row">

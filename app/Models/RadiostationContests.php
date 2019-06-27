@@ -13,7 +13,7 @@ class RadiostationContests extends Model
 {
 	use ActionButtons, SoftDeletes, Sluggable;
 
-	protected $fillable = ['name','start','end','enabled','radiostation_id','unique_entrants'];
+	protected $fillable = ['name','start','end','enabled','radiostation_id','unique_entrants','message'];
 
 	protected $buttons = [
 		'route' => 'admin.contests',

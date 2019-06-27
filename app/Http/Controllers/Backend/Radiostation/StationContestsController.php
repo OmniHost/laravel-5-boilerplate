@@ -71,6 +71,7 @@ class StationContestsController extends Controller
 		$data = $request->only(	'name',
 		'enabled',
 		'unique_entrants',
+		'message',
 		'start',
 		'end');
 		$data['radiostation_id'] = $station;
@@ -122,6 +123,7 @@ class StationContestsController extends Controller
 		$data = $request->only(	'name',
 		'enabled',
 		'unique_entrants',
+		'message',
 		'start',
 		'end');
 

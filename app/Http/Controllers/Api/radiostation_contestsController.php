@@ -9,6 +9,8 @@ use Twilio\Twiml as TwiML;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
+use Illuminate\Notifications\Notification;
+
 class radiostation_contestsController extends Controller
 {
     /**
@@ -77,7 +79,7 @@ class radiostation_contestsController extends Controller
 		}
 
 
-		$response->say('Hello. Please record your message.',array('voice' => 'man','language' => 'en-gb'));
+		$response->say($item->message ,array('voice' => 'man','language' => 'en-gb'));
 		$response->record();
 		$response->hangup();
 
@@ -88,6 +90,12 @@ class radiostation_contestsController extends Controller
 
 	public function statusCall(Request $request){
 		Log::info(print_r($request->all(),1));
+
+		//Notification::send($users, new InvoicePaid($invoice));
+		/*
+		Notification::route('nexmo', '5555555555')
+			->notify(new InvoicePaid($invoice)));
+			*/
 	}
 
 }
