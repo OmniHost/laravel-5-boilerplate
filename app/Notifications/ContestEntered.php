@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
 use Illuminate\Notifications\Messages\NexmoMessage;
+use Abstractrs\UrlShortener\Facades\UrlShortener;
 
 class ContestEntered extends Notification
 {
@@ -60,14 +61,19 @@ class ContestEntered extends Notification
         return [
 			//
 			'content' => $this->genereateContent(),
-			'from' => $this->generateFrom(),
-			'entrant' => $this->entrant
+			'from' => $this->generateFrom()
         ];
 	}
 
 
 	protected function genereateContent(){
-		return 'This is the SMS message';
+
+		$entry_url = url('/entries/' . $this->entrant->station->slug . '/' . $this->entrant->uuid);
+		$url = UrlShortener::driver('bitly')->shorten($entry_url);
+
+		$message =  'Thank you for entering ' . $this->entrant->contest->name . ' through ' . $this->entrant->station->name;
+		$message .= ' Please complete your entry at ' . $url . ' .';
+		return $message;
 	}
 
 	protected function generateFrom(){

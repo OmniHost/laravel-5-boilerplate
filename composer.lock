@@ -4,8 +4,64 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2827148e71d4530618fad96c7f440745",
+    "content-hash": "ed502fdd59363135588a6d04cc5abd85",
     "packages": [
+        {
+            "name": "abstractrs/url-shortener",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/abstractrs/url-shortener.git",
+                "reference": "ab539f8170c0d3b62258f5ae67794a5fbd4c3f49"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/abstractrs/url-shortener/zipball/ab539f8170c0d3b62258f5ae67794a5fbd4c3f49",
+                "reference": "ab539f8170c0d3b62258f5ae67794a5fbd4c3f49",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/config": "5.6.*|5.7.*|5.8.*",
+                "illuminate/support": "5.6.*|5.7.*|5.8.*",
+                "mremi/url-shortener": "2.2.x"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.0",
+                "orchestra/testbench": "3.6.x|3.7.x|3.8.x",
+                "phpunit/phpunit": "^7.0|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Abstractrs\\UrlShortener\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Waavi",
+                    "email": "info@waavi.com",
+                    "homepage": "http://waavi.com"
+                },
+                {
+                    "name": "Mladen Djordjevic",
+                    "email": "mladen.99.djordjevic@gmail.com"
+                }
+            ],
+            "description": "Url Shortener for Laravel 5 with support for Google and Bitly drivers.",
+            "keywords": [
+                "laravel",
+                "shortener",
+                "url",
+                "url short",
+                "url shortener",
+                "waavi"
+            ],
+            "time": "2019-05-16T08:33:51+00:00"
+        },
         {
             "name": "albertcht/invisible-recaptcha",
             "version": "v1.9.2",
@@ -2506,6 +2562,55 @@
                 "psr-3"
             ],
             "time": "2018-11-05T09:00:11+00:00"
+        },
+        {
+            "name": "mremi/url-shortener",
+            "version": "v2.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mremi/UrlShortener.git",
+                "reference": "18ab67aa27c9c48ba54a440d002bd6d2fa65e094"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mremi/UrlShortener/zipball/18ab67aa27c9c48ba54a440d002bd6d2fa65e094",
+                "reference": "18ab67aa27c9c48ba54a440d002bd6d2fa65e094",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.0",
+                "php": "^5.5 || ^7.0",
+                "symfony/console": "^2.7 || ^3.1 || ^4.1"
+            },
+            "require-dev": {
+                "fabpot/php-cs-fixer": "~0.1 || ~1.0",
+                "phpunit/phpunit": "~4.8",
+                "symfony/phpunit-bridge": "~2.7 || ~3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Mremi\\UrlShortener\\": "src/Mremi/UrlShortener"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rémi Marseille",
+                    "email": "marseille.remi@gmail.com"
+                }
+            ],
+            "description": "A PHP5 library using API to shorten/expand URL",
+            "homepage": "https://github.com/mremi/UrlShortener",
+            "keywords": [
+                "api",
+                "shortener",
+                "url"
+            ],
+            "time": "2018-10-10T07:01:17+00:00"
         },
         {
             "name": "mtownsend/response-xml",

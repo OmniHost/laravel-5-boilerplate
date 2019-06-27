@@ -10,9 +10,12 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
 use Illuminate\Notifications\Notification;
+use App\Notifications\ContestEntered;
 
 class radiostation_contestsController extends Controller
 {
+
+
     /**
      * Eloquent model.
      *
@@ -39,13 +42,26 @@ class radiostation_contestsController extends Controller
 
 
 	public function incommingCall($id, Request $request){
-		Log::info("Incomming Call");
-		Log::info(print_r($_POST,1));
+
 		try {
 			$item = $this->repository->getById($id);
 		}catch(\Exception $e){
 			$item = false;
 		}
+
+		//Silly system sends straight back here with the recording url:
+		$recording = $request->input('CallSid');
+		$entry = RadiostationEntrants::where('recording',$recording)->first();
+		if($entry){
+			$entry->recording_url = $request->input('RecordingUrl');
+			$entry->save();
+
+			//Now we need to notify!
+			$entry->notify(new ContestEntered($entry));
+			return response()->xml((string)$entry->uuid);
+		}
+
+
 		$now = \Carbon\Carbon::now();
 		$response = new TwiML;
 
@@ -91,8 +107,17 @@ class radiostation_contestsController extends Controller
 	}
 
 	public function statusCall(Request $request){
-		Log::info("Status Call");
-		Log::info(print_r($request->all(),1));
+
+	//	dd($request->all());
+
+	//	$entrant = RadiostationEntrants::find(5);
+
+	//	$entrant->notify(new ContestEntered($entrant));
+
+		//Notification::route('nexmo', '5555555555')->notify(new ContestEntered($entrant));
+
+		//Log::info("Status Call");
+		//Log::info(print_r($request->all(),1));
 
 		//$entrant = RadiostationEntrants::where('mobile',$request->input('Caller'))->where('completed','1')->first();
 
