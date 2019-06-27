@@ -21,3 +21,4 @@ use App\Http\Controllers\Api\radiostation_contestsController;
 //Route::resource('radiostation_contests', 'Api\\radiostation_contestsController');
 
 Route::post('radiostation_contests/{id}', [radiostation_contestsController::class, 'incommingCall']);
+Route::post('radiostation_contests/callstatus', [radiostation_contestsController::class, 'statusCall']);

@@ -27,7 +27,8 @@ class RadiostationEntrants extends Model
 	protected $attributes = [
 		'name' => '',
 		'email' => '',
-		'ipaddress' => ''
+		'ipaddress' => '',
+		'completed' => 0
 	];
 
 
