@@ -13,7 +13,7 @@ class RadiostationEntrants extends Model
 
 	use ActionButtons, SoftDeletes,Uuid;
 
-	protected $fillable = ['name','email','mobile','recording','completed','ipaddress','radiostation_contests_id'];
+	protected $fillable = ['name','email','mobile','recording','recording_url','completed','ipaddress','radiostation_contests_id'];
 
 	protected $buttons = [
 		'route' => 'admin.stations',
@@ -28,7 +28,8 @@ class RadiostationEntrants extends Model
 		'name' => '',
 		'email' => '',
 		'ipaddress' => '',
-		'completed' => 0
+		'completed' => 0,
+		'recording_url' => ''
 	];
 
 

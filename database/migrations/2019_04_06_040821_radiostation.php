@@ -65,6 +65,7 @@ class Radiostation extends Migration
 			$table->string('email');
 			$table->string('mobile');
 			$table->string('recording');
+			$table->string('recording_url')->nullable();
 			$table->boolean('completed');
 			$table->unsignedBigInteger('radiostation_contests_id');
 			$table->ipAddress('ipaddress');
