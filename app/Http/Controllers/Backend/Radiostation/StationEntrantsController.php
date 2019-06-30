@@ -126,4 +126,9 @@ class StationEntrantsController extends Controller
 		return view('backend.radiostations.entrants.' . $tpl);
 	}
 
+	public function download($uuid) {
+		$entrant = $this->stationEntrantsRepository->where('uuid', $uuid)->first();
+		return response()->streamDownload(function() use ($entrant) { echo file_get_contents($entrant->recording_url); }, $entrant->first_name .'_' . $entrant->uuid . '.mp3');
+	}
+
 }

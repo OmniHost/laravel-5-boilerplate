@@ -51,12 +51,52 @@
 					<div class="form-group row ">
 						{{ html()->label('Call File')->class('col-md-2 form-control-label')->for('dropzonefile') }}
 
-                        <div class="col-md-10">
-							<input type="hidden" name="upload_id" id="upload_id" value="{{ $contest ? $contest->upload_id : null }}"/>
-							<input type="text" class="form-control" id="upload_id_filename" disabled value="{{ $contest && $contest->upload ? $contest->upload->original : null }}" />
+                        <div class="col-md-3">
+							<input data-for="id" type="hidden" name="upload_id" id="upload_id" value="{{ $contest ? $contest->upload_id : null }}"/>
+							<input data-for="name" type="text" class="form-control" id="upload_id_filename" disabled value="{{ $contest && $contest->upload ? $contest->upload->original : null }}" />
 							<div id="file" class="dropzone"></div>
                         </div>
-                      </div>
+					  </div>
+
+					  <div class="form-group row ">
+							{{ html()->label('Share Image 1')->class('col-md-2 form-control-label')->for('dropzoneimage1') }}
+
+							<div class="col-md-3">
+								<input data-for="id" type="hidden" name="image1" id="image1_id" value="{{ $contest ? $contest->image1 : null }}"/>
+								<input data-for="name" type="text" class="form-control" id=image1_filename" disabled value="{{ $contest && $contest->image1 ? $contest->imageOne->original : null }}" />
+								<div id="image1" class="dropzone"></div>
+							</div>
+						  </div>
+
+						  <div class="form-group row ">
+								{{ html()->label('Share Image 1')->class('col-md-2 form-control-label')->for('dropzoneimage2') }}
+
+								<div class="col-md-3">
+									<input data-for="id" type="hidden" name="image2" id="image2_id" value="{{ $contest ? $contest->image2 : null }}"/>
+									<input data-for="name" type="text" class="form-control" id=image2_filename" disabled value="{{ $contest && $contest->image2 ? $contest->imageTwo->original : null }}" />
+									<div id="image2" class="dropzone"></div>
+								</div>
+							  </div>
+
+							  <div class="form-group row ">
+									{{ html()->label('Share Image 1')->class('col-md-2 form-control-label')->for('dropzoneimage3') }}
+
+									<div class="col-md-3">
+										<input data-for="id" type="hidden" name="image3" id="image3_id" value="{{ $contest ? $contest->image3 : null }}"/>
+										<input data-for="name" type="text" class="form-control" id=image3_filename" disabled value="{{ $contest && $contest->image3 ? $contest->imageThree->original : null }}" />
+										<div id="image3" class="dropzone"></div>
+									</div>
+								  </div>
+
+								  <div class="form-group row ">
+										{{ html()->label('Share Image 1')->class('col-md-2 form-control-label')->for('dropzoneimage4') }}
+
+										<div class="col-md-3">
+											<input data-for="id" type="hidden" name="image4" id="image4_id" value="{{ $contest ? $contest->image4 : null }}"/>
+											<input data-for="name" type="text" class="form-control" id=image4_filename" disabled value="{{ $contest && $contest->image4 ? $contest->imageFour->original : null }}" />
+											<div id="image4" class="dropzone"></div>
+										</div>
+									  </div>
 
 					<div class="form-group row">
 						{{ html()->label('Enabled')->class('col-md-2 form-control-label')->for('enabled') }}
@@ -128,32 +168,69 @@
 @push('after-scripts')
 
 
-	   <script>
-    var drop = new Dropzone('#file', {
+	<script>
+
+
+	var dropDefaults =  {
 		chunk: true,
-      createImageThumbnails: false,
-      addRemoveLinks: true,
-      url: "{{ route('admin.contests.upload') }}",
-      headers: {
-        'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
-	  },
-	  maxFiles: 1,
-	  acceptedFiles: '.mp3',
-	  dictDefaultMessage : 'Click here to upload or Drop file here (mp3 only)'
-	});
+      	createImageThumbnails: false,
+      	addRemoveLinks: true,
+      	url: "{{ route('admin.contests.upload.mp3') }}",
+      	headers: {
+        	'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
+	  	},
+	  	maxFiles: 1,
+	  	acceptedFiles: '.mp3',
+	  	dictDefaultMessage : 'Click here to upload or Drop file here (mp3 only)'
+	}
 
+    var drop = new Dropzone('#file',dropDefaults);
+	var imageDropVar = dropDefaults;
+	imageDropVar.acceptedFiles = '.jpg,.png,.jpeg'
+	imageDropVar.url = "{{ route('admin.contests.upload.image') }}";
+	imageDropVar.createImageThumbnails = true;
+	imageDropVar.dictDefaultMessage = 'Click here to upload or Drop image';
 
-	drop.on('complete', function(file) {
+	var imageDrop = new Dropzone('#image1', imageDropVar);
+	var imageDrop2 = new Dropzone('#image2', imageDropVar)
+	var imageDrop3 = new Dropzone('#image3', imageDropVar)
+	var imageDrop4 = new Dropzone('#image4', imageDropVar)
+
+	var onImageDone = function(file) {
+
 		if(file.status === 'error'){
 			drop.removeFile(file);
 			alert("Failed to upload error");
 			return;
 		}
+		const el = $(this)[0].element.closest('.form-group');
 		var obj = JSON.parse(file.xhr.response);
-		$('#upload_id_filename').val(file.name);
-		$('#upload_id').val(obj.id);
+		$(el).find('[data-for="name"]').val(file.name);
+		$(el).find('[data-for="id"]').val(obj.id);
+		//drop.removeFile(file);
+	}
+
+	imageDrop.on('complete', onImageDone);
+	imageDrop2.on('complete', onImageDone);
+	imageDrop3.on('complete', onImageDone);
+	imageDrop4.on('complete', onImageDone);
+
+	drop.on('complete', function(file) {
+		console.log($(this))
+
+		if(file.status === 'error'){
+			drop.removeFile(file);
+			alert("Failed to upload error");
+			return;
+		}
+		const el = $(this)[0].element.closest('.form-group');
+		var obj = JSON.parse(file.xhr.response);
+		$(el).find('[data-for="name"]').val(file.name);
+		$(el).find('[data-for="id"]').val(obj.id);
 		drop.removeFile(file);
 	});
+
+
 	</script>
 
 @endPush

@@ -45,6 +45,7 @@ class ContestEntered extends Notification
      */
     public function toNexmo($notifiable)
     {
+
         return (new NexmoMessage)
 		->content($this->genereateContent())
 		->from($this->generateFrom());
@@ -68,7 +69,12 @@ class ContestEntered extends Notification
 
 	protected function genereateContent(){
 
-		$entry_url = url('/entries/' . $this->entrant->station->slug . '/' . $this->entrant->uuid);
+		$entry_url = route('frontend.entryurl', [
+			'stationSlug' => $this->entrant->station->slug,
+			'contestSlug' => $this->entrant->contest->slug,
+			'uuid' => $this->entrant->uuid
+			]);
+		//url('/entries/' . $this->entrant->station->slug . '/' . $this->entrant->uuid);
 		$url = UrlShortener::driver('bitly')->shorten($entry_url);
 
 		$message =  'Thank you for entering ' . $this->entrant->contest->name . ' through ' . $this->entrant->station->name;

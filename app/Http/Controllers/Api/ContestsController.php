@@ -53,7 +53,7 @@ class ContestsController extends Controller
 		$recording = $request->input('CallSid');
 		$entry = RadiostationEntrants::where('recording',$recording)->first();
 		if($entry){
-			$entry->recording_url = $request->input('RecordingUrl');
+			$entry->recording_url = $request->input('RecordingUrl') . '.mp3';
 			$entry->save();
 
 			//Now we need to notify!
@@ -107,16 +107,36 @@ class ContestsController extends Controller
 	}
 
 	public function getEntrant($uuid, Request $request){
-		//\dd($uuid);
+
+
 		try {
-			$item = RadiostationEntrants::where('uuid' , $uuid)->first();
+			$item = RadiostationEntrants::with(['station','contest'])->where('uuid' , $uuid)->first();
+			if(!$item){
+				throw new \Exception('Record not found');
+			}
 		}catch(\Exception $e){
 			return $this->errorNotFound("Record not found:");
 		}
-		$item->station_name = $item->station->name;
-		$item->contest_name = $item->contest->name;
-        return $this->respondWithOne($item->only('uuid','station_name','mobile','completed','contest_name','first_name','last_name','email','address1','address2'));
+
+		$res = $item->only('uuid','mobile','completed','first_name','last_name','email','address1','address2','message_image');
+		$res['station'] = $item->station->only('name');
+		$contest = $item->contest->only(['name', 'message']);
+		$contest['images'] = [];
+		foreach(['image1' => 'imageOne','image2'=> 'imageTwo','image3' => 'imageThree','image4' => 'imageFour'] as $img => $imgCall){
+			if(!empty($item->contest->{$img})){
+				$contest['images'][$item->contest->{$img}] = $item->contest->{$imgCall}->url();
+			}
+		}
+
+
+		$res['contest'] = $contest;
+
+		$res['entrant_url'] = route('frontend.entrant.shareurl', $item->uuid);
+
+        return $this->respondWithOne($res);
 	}
+
+
 
 	public function saveEntrantProfile($uuid, Request $request){
 		try {
@@ -124,66 +144,21 @@ class ContestsController extends Controller
 		}catch(\Exception $e){
 			return $this->errorNotFound("Record not found:");
 		}
-		$item->fill($request->only(['first_name','last_name','email','address1','address2','opt_in','ipaddress']));
-		$item->save();
-		return $this->respondWithOne($item->only('uuid','station_name','mobile','completed','contest_name','first_name','last_name','email','address1','address2','opt_in'));
+
+		if( $request->input('notify') == 1){
+			//Email notification Here
+		}else{
+			$item->fill($request->only(['first_name','last_name','email','address1','address2','opt_in','ipaddress','message_image','optin','completed']));
+			$item->save();
+		}
+
+
+		return $this->getEntrant($uuid, $request);
+		return $this->respondWithOne($item->only('uuid','station_name','mobile','completed','contest_name','first_name','last_name','email','address1','address2','optin'));
 
 	}
 
 	public function statusCall(Request $request){
-
-	//	dd($request->all());
-
-	//	$entrant = RadiostationEntrants::find(5);
-
-	//	$entrant->notify(new ContestEntered($entrant));
-
-		//Notification::route('nexmo', '5555555555')->notify(new ContestEntered($entrant));
-
-		//Log::info("Status Call");
-		//Log::info(print_r($request->all(),1));
-
-		//$entrant = RadiostationEntrants::where('mobile',$request->input('Caller'))->where('completed','1')->first();
-
-
-		/*
-		[Called] => +6435680567
-    [Digits] => hangup
-    [RecordingUrl] => https://api.twilio.com/2010-04-01/Accounts/ACd573bfc497198d5f291954faed16811f/Recordings/REa7f9f4cdd02ee545cbe0337b289a5f1b
-    [ToState] => Wyndham
-    [CallerCountry] => NZ
-    [Direction] => inbound
-    [CallerState] =>
-    [ToZip] =>
-    [CallSid] => CAa20a3b884040c8ff4a16f103dbd419b8
-    [To] => +6435680567
-    [CallerZip] =>
-    [ToCountry] => NZ
-    [ApiVersion] => 2010-04-01
-    [CalledZip] =>
-    [CalledCity] =>
-    [CallStatus] => completed
-    [RecordingSid] => REa7f9f4cdd02ee545cbe0337b289a5f1b
-    [From] => +64210304036
-    [AccountSid] => ACd573bfc497198d5f291954faed16811f
-    [CalledCountry] => NZ
-    [CallerCity] =>
-    [Caller] => +64210304036
-    [FromCountry] => NZ
-    [ToCity] =>
-    [FromCity] =>
-    [CalledState] => Wyndham
-    [FromZip] =>
-    [FromState] =>
-	[RecordingDuration] => 4
-	*/
-
-
-		//Notification::send($users, new InvoicePaid($invoice));
-		/*
-		Notification::route('nexmo', '5555555555')
-			->notify(new InvoicePaid($invoice)));
-			*/
 	}
 
 }

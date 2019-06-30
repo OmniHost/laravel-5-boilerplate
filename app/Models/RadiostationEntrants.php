@@ -18,7 +18,7 @@ class RadiostationEntrants extends Model
 
 	use ActionButtons, SoftDeletes,Uuid, Notifiable;
 
-	protected $fillable = ['first_name','last_name','email','mobile','recording','recording_url','completed','ipaddress','radiostation_contests_id','optin'];
+	protected $fillable = ['first_name','last_name','email','mobile','recording','recording_url','completed','ipaddress','radiostation_contests_id','optin','message_image'];
 
 	protected $buttons = [
 		'route' => 'admin.entrants',
@@ -45,9 +45,8 @@ class RadiostationEntrants extends Model
      */
     public function getCallButtonAttribute()
     {
-		return 'DOWNLOAD';
-       // return ' <audio preload="auto" src="https://zhuanjia4a-1252768022.cossh.myqcloud.com/8fc3d932978f11e79dea4ccc6aef9ea4.mp3"></audio>';
-    }
+		return '<a href="'.route('admin.entrants.download', ['uuid' => $this->uuid]).'" class="btn btn-success"><i class="fas fa-download" data-toggle="tooltip" data-placement="top" title="'.__('Download Recording').'"></i></a>';
+   }
 
 	public function getContest(){
 		return RadiostationContests::find($this->radiostation_contests_id);
@@ -91,6 +90,10 @@ class RadiostationEntrants extends Model
 			 data-trans-button-confirm="'.__('buttons.general.crud.delete').'"
 			 data-trans-title="'.__('strings.backend.general.are_you_sure').'"
 			 class="btn btn-danger"><i class="fas fa-trash" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.delete').'"></i></a> ';
+	}
+
+	public function shareImage(){
+		return $this->hasOne(Upload::class,'id','message_image');
 	}
 
 }

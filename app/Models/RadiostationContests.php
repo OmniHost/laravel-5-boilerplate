@@ -13,7 +13,7 @@ class RadiostationContests extends Model
 {
 	use ActionButtons, SoftDeletes, Sluggable;
 
-	protected $fillable = ['name','start','end','enabled','radiostation_id','unique_entrants','message','upload_id'];
+	protected $fillable = ['name','start','end','enabled','radiostation_id','unique_entrants','message','upload_id', 'image1', 'image2', 'image3', 'image4'];
 
 	protected $buttons = [
 		'route' => 'admin.contests',
@@ -96,5 +96,18 @@ class RadiostationContests extends Model
 
 	public function upload(){
 		return $this->hasOne(Upload::class,'id','upload_id');
+	}
+
+	public function imageOne(){
+		return $this->hasOne(Upload::class,'id','image1');
+	}
+	public function imageTwo(){
+		return $this->hasOne(Upload::class,'id','image2');
+	}
+	public function imageThree(){
+		return $this->hasOne(Upload::class,'id','image3');
+	}
+	public function imageFour(){
+		return $this->hasOne(Upload::class,'id','image4');
 	}
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\Frontend\HomeController;
 
 /*
  * Global Routes
@@ -15,7 +16,11 @@ Route::get('lang/{lang}', [LanguageController::class, 'swap']);
  * Namespaces indicate folder structure
  */
 Route::group(['namespace' => 'Frontend', 'as' => 'frontend.'], function () {
-    include_route_files(__DIR__.'/frontend/');
+	include_route_files(__DIR__.'/frontend/');
+
+	Route::get('entrant/{uuid}',[HomeController::class, 'entrant'])->name('entrant.shareurl');
+ 	Route::get('entries/{stationSlug}/{contestSlug}/{uuid}', [HomeController::class, 'entry'])->name('entryurl');
+
 });
 
 /*

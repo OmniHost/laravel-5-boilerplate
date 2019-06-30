@@ -30,7 +30,7 @@ class StationContestsController extends Controller
      */
 	protected $stationsRepository;
 
-	   /**
+   /**
      * UserController constructor.
      *
      * @param StationContestsRepository $stationContestsRepository
@@ -83,6 +83,7 @@ class StationContestsController extends Controller
 		'message',
 		'upload_id',
 		'start',
+		'image1','image2','image3','image4',
 		'end');
 		$data['radiostation_id'] = $station;
 
@@ -135,6 +136,7 @@ class StationContestsController extends Controller
 		'unique_entrants',
 		'message',
 		'start',
+		'image1','image2','image3','image4',
 		'upload_id',
 		'end');
 
@@ -165,39 +167,60 @@ class StationContestsController extends Controller
 
 
 
+	public function uploadImage(FileReceiver $receiver){
+		// check if the upload is success, throw exception or return response you need
+		if ($receiver->isUploaded() === false) {
+			throw new UploadMissingFileException();
+		}
+		// receive the file
+		$save = $receiver->receive();
+		// check if the upload has finished (in chunk mode it will send smaller files)
+		if ($save->isFinished()) {
+			// save the file and return any response you need
+			return $this->saveFile($save->getFile(), 'contestimage');
+		}
+		// we are in chunk mode, lets send the current progress
+		/** @var AbstractHandler $handler */
+		$handler = $save->handler();
+		return response()->json([
+			"done" => $handler->getPercentageDone()
+		]);
+	}
+
+
 	public function upload(FileReceiver $receiver)
-{
+	{
 
-	// check if the upload is success, throw exception or return response you need
-	if ($receiver->isUploaded() === false) {
-		throw new UploadMissingFileException();
+		// check if the upload is success, throw exception or return response you need
+		if ($receiver->isUploaded() === false) {
+			throw new UploadMissingFileException();
+		}
+		// receive the file
+		$save = $receiver->receive();
+		// check if the upload has finished (in chunk mode it will send smaller files)
+		if ($save->isFinished()) {
+			// save the file and return any response you need
+			return $this->saveFile($save->getFile(), 'callscripts', '.mp3');
+		}
+		// we are in chunk mode, lets send the current progress
+		/** @var AbstractHandler $handler */
+		$handler = $save->handler();
+		return response()->json([
+			"done" => $handler->getPercentageDone()
+		]);
+
 	}
-	// receive the file
-	$save = $receiver->receive();
-	// check if the upload has finished (in chunk mode it will send smaller files)
-	if ($save->isFinished()) {
-		// save the file and return any response you need
-		return $this->saveFile($save->getFile());
-	}
-	// we are in chunk mode, lets send the current progress
-	/** @var AbstractHandler $handler */
-	$handler = $save->handler();
-	return response()->json([
-		"done" => $handler->getPercentageDone()
-	]);
 
-}
-
-protected function saveFile($uploadedFile){
+protected function saveFile($uploadedFile, $folder= "", $ext = NULL){
 
 
 
 	  //$filename = new File()
 	  $original = $uploadedFile->getClientOriginalName();
-	  $filename = sha1(time()) . '.mp3';
+	  $filename = sha1(time()) . $ext;
 
      $filename = Storage::disk('public')->putFileAs(
-        'callscripts',
+        $folder,
 		$uploadedFile,
 		$filename
       );

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "213f558e3fd8d47e6256ef4cc7e5cac0",
+    "content-hash": "afaacc137ad3e170f2b9cb38073374f4",
     "packages": [
         {
             "name": "abstractrs/url-shortener",
@@ -4398,6 +4398,50 @@
                 "uuid"
             ],
             "time": "2018-07-19T23:38:55+00:00"
+        },
+        {
+            "name": "setkyar/laravel-social-share-cards",
+            "version": "1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/setkyar/laravel-social-share-cards.git",
+                "reference": "f114a89e420ee01a62e0bbfcae0300596649aa5c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/setkyar/laravel-social-share-cards/zipball/f114a89e420ee01a62e0bbfcae0300596649aa5c",
+                "reference": "f114a89e420ee01a62e0bbfcae0300596649aa5c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0||~5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SetKyar\\Social\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Set Kyar Wa Lar",
+                    "email": "setkyar16@gmail.com"
+                }
+            ],
+            "description": "Easy Social Cards",
+            "homepage": "https://github.com/setkyar/laravel-social-share-cards",
+            "keywords": [
+                "laravel-social-share-cards",
+                "setkyar"
+            ],
+            "time": "2016-11-18T06:22:06+00:00"
         },
         {
             "name": "spatie/array-to-xml",
