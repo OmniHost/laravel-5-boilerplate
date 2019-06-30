@@ -6,9 +6,50 @@
 // Import styles
 @import "~@coreui/coreui/scss/coreui";
 
+// Dropzone
+@import '~dropzone/dist/min/dropzone.min.css';
+
+.dropzone {
+  margin-bottom: 20px;
+  min-height: auto;
+}
+
 // Fix mobile footer
 .app-footer {
     flex: 0 0;
     padding-top: map-get($spacers, 3);
-    padding-bottom: map-get($spacers, 3);
+	padding-bottom: map-get($spacers, 3);
+	display: none;
+}
+
+.app-body {
+	.ppq-audio-player {
+		height: 40px !important;
+		line-height: 40px !important;
+	}
+
+	.ppq-audio-player .play-pause-btn .play-pause-icon {
+		width: 25px;
+		height: 25px;
+	}
+
+	.ppq-audio-player .play-pause-btn {
+		margin: 8px 0;
+	}
+
+	.ppq-audio-player .play-pause-btn .play-pause-icon:after {
+		width: 11px;
+		height: 12px;
+	}
+
+	.ppq-audio-player .play-pause-btn .play-pause-icon:after, .ppq-audio-player.player-playing .play-pause-icon:after {
+		background-size: 23px 12px;
+	}
+
+	.ppq-audio-player.player-playing .play-pause-icon:after {
+		background-position: -14px 0;
+		width: 9px;
+		height: 11px;
+		background-size: 22px 12px;
+	}
 }

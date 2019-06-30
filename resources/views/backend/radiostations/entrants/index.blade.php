@@ -12,15 +12,11 @@
         <div class="row">
             <div class="col-sm-5">
                 <h4 class="card-title mb-0">
-                    Radio Stations
+                    Entrants
                 </h4>
             </div><!--col-->
 
-            <div class="col-sm-7">
-				<div class="btn-toolbar float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
-					<a href="{{ route('admin.stations.create') }}" class="btn btn-success ml-1" data-toggle="tooltip" title="@lang('labels.general.create_new')"><i class="fas fa-plus-circle"></i></a>
-				</div><!--btn-toolbar-->
-            </div><!--col-->
+
         </div><!--row-->
 
         <div class="row mt-4">
@@ -29,20 +25,31 @@
                     <table class="table">
                         <thead>
                         <tr>
-							<th>Station Name</th>
-							<th>Slug</th>
+							<th></th>
+							<th>First Name</th>
+							<th>Last Name</th>
+							<th>Mobile</th>
+							<th>Email</th>
+							<th>Suburb</th>
+							<th>City</th>
 							<th>Created</th>
+
                             <th>@lang('labels.general.actions')</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($stations as $station)
+                        @foreach($entrants as $entrant)
                             <tr>
-								<td>{{ $station->name }}</td>
-								<td>{{ $station->slug }}</td>
+								<td><audio preload="auto" src="{{ $entrant->recording_url }}"></audio></td>
+								<td>{{ $entrant->first_name }}</td>
+								<td>{{ $entrant->last_name }}</td>
+								<td>{{ $entrant->mobile }}</td>
+								<td>{{ $entrant->email }}</td>
+								<td>{{ $entrant->address1 }}</td>
+								<td>{{ $entrant->address2 }}</td>
 
-                                <td>{{ $station->created_at->diffForHumans() }}</td>
-                                <td>{!! $station->action_buttons !!}</td>
+                                <td>{{ $entrant->created_at->diffForHumans() }}</td>
+                                <td>{!! $entrant->action_buttons !!}</td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -53,16 +60,24 @@
         <div class="row">
             <div class="col-7">
                 <div class="float-left">
-                    {!! $stations->total() !!} {{ trans_choice(' Total Radio Stations', $stations->total()) }}
+                    {!! $entrants->total() !!} {{ trans_choice(' Total Entrants', $entrants->total()) }}
                 </div>
             </div><!--col-->
 
             <div class="col-5">
                 <div class="float-right">
-                    {!! $stations->render() !!}
+                    {!! $entrants->render() !!}
                 </div>
             </div><!--col-->
         </div><!--row-->
     </div><!--card-body-->
 </div><!--card-->
 @endsection
+
+@push('after-scripts')
+
+
+	   <script>
+$('audio').initAudioPlayer();
+</script>
+@endPush

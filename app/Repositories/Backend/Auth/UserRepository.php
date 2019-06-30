@@ -123,7 +123,12 @@ class UserRepository extends BaseRepository
 
                 // Add selected roles/permissions
                 $user->syncRoles($data['roles']);
-                $user->syncPermissions($data['permissions']);
+				$user->syncPermissions($data['permissions']);
+
+				//add the user radio station
+				if($data['station_id']){
+					$user->stations()->create([ 'radiostation_id' => $data['station_id']]);
+				}
 
                 //Send confirmation email if requested and account approval is off
                 if ($user->confirmed === false && isset($data['confirmation_email']) && ! config('access.users.requires_approval')) {
@@ -165,7 +170,21 @@ class UserRepository extends BaseRepository
             ])) {
                 // Add selected roles/permissions
                 $user->syncRoles($data['roles']);
-                $user->syncPermissions($data['permissions']);
+				$user->syncPermissions($data['permissions']);
+
+				$station = $user->stations()->first();
+
+				if($data['station_id']){
+					if($station){
+						$user->stations()->update([ 'radiostation_id' => $data['station_id']]);
+					}else{
+						$user->stations()->create([ 'radiostation_id' => $data['station_id']]);
+					}
+				}else{
+					if($station){
+						$station->delete();
+					}
+				}
 
                 event(new UserUpdated($user));
 

@@ -18,14 +18,14 @@ class RadiostationEntrants extends Model
 
 	use ActionButtons, SoftDeletes,Uuid, Notifiable;
 
-	protected $fillable = ['name','email','mobile','recording','recording_url','completed','ipaddress','radiostation_contests_id'];
+	protected $fillable = ['first_name','last_name','email','mobile','recording','recording_url','completed','ipaddress','radiostation_contests_id','optin'];
 
 	protected $buttons = [
-		'route' => 'admin.stations',
-		'edit' => true,
+		'route' => 'admin.entrants',
+		'edit' => false,
 		'delete' => true,
 		'custom' => [
-
+			'getCallButtonAttribute'
 		]
 	];
 
@@ -37,6 +37,17 @@ class RadiostationEntrants extends Model
 		'recording_url' => ''
 	];
 
+
+
+
+	/**
+     * @return string
+     */
+    public function getCallButtonAttribute()
+    {
+		return 'DOWNLOAD';
+       // return ' <audio preload="auto" src="https://zhuanjia4a-1252768022.cossh.myqcloud.com/8fc3d932978f11e79dea4ccc6aef9ea4.mp3"></audio>';
+    }
 
 	public function getContest(){
 		return RadiostationContests::find($this->radiostation_contests_id);
@@ -67,6 +78,19 @@ class RadiostationEntrants extends Model
             'radiostation_contests_id', // Local key on CURRENT table...
             'radiostation_id' // Local key on contest table...
         );
+	}
+
+	 /**
+     * @return string
+     */
+    public function getDeleteButtonAttribute()
+    {
+        return '<a href="'.route($this->buttons['route'] . '.destroy', ['station' => $this->station->id, 'contest' => $this->radiostation_contests_id, $this ]).'"
+			 data-method="delete"
+			 data-trans-button-cancel="'.__('buttons.general.cancel').'"
+			 data-trans-button-confirm="'.__('buttons.general.crud.delete').'"
+			 data-trans-title="'.__('strings.backend.general.are_you_sure').'"
+			 class="btn btn-danger"><i class="fas fa-trash" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.delete').'"></i></a> ';
 	}
 
 }

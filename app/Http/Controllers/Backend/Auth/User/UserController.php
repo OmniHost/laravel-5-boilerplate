@@ -12,6 +12,8 @@ use App\Http\Requests\Backend\Auth\User\StoreUserRequest;
 use App\Http\Requests\Backend\Auth\User\ManageUserRequest;
 use App\Http\Requests\Backend\Auth\User\UpdateUserRequest;
 
+use App\Repositories\Backend\Radiostations\StationsRepository;
+
 /**
  * Class UserController.
  */
@@ -50,9 +52,10 @@ class UserController extends Controller
      *
      * @return mixed
      */
-    public function create(ManageUserRequest $request, RoleRepository $roleRepository, PermissionRepository $permissionRepository)
+    public function create(ManageUserRequest $request, RoleRepository $roleRepository, PermissionRepository $permissionRepository, StationsRepository $stationsRepository)
     {
-        return view('backend.auth.user.create')
+		return view('backend.auth.user.create')
+			->withStations($stationsRepository->get(['id','name']))
             ->withRoles($roleRepository->with('permissions')->get(['id', 'name']))
             ->withPermissions($permissionRepository->get(['id', 'name']));
     }
@@ -74,7 +77,8 @@ class UserController extends Controller
             'confirmed',
             'confirmation_email',
             'roles',
-            'permissions'
+			'permissions',
+			'station_id'
         ));
 
         return redirect()->route('admin.auth.user.index')->withFlashSuccess(__('alerts.backend.users.created'));
@@ -100,10 +104,12 @@ class UserController extends Controller
      *
      * @return mixed
      */
-    public function edit(ManageUserRequest $request, RoleRepository $roleRepository, PermissionRepository $permissionRepository, User $user)
+    public function edit(ManageUserRequest $request, RoleRepository $roleRepository, PermissionRepository $permissionRepository, User $user, StationsRepository $stationsRepository)
     {
         return view('backend.auth.user.edit')
-            ->withUser($user)
+			->withUser($user)
+			->withStations($stationsRepository->get(['id','name']))
+			->withRadioStation($user->stations()->get(['radiostation_id'])->first())
             ->withRoles($roleRepository->get())
             ->withUserRoles($user->roles->pluck('name')->all())
             ->withPermissions($permissionRepository->get(['id', 'name']))
@@ -125,7 +131,8 @@ class UserController extends Controller
             'last_name',
             'email',
             'roles',
-            'permissions'
+			'permissions',
+			'station_id'
         ));
 
         return redirect()->route('admin.auth.user.index')->withFlashSuccess(__('alerts.backend.users.updated'));

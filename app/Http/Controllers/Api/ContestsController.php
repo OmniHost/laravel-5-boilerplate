@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Notifications\Notification;
 use App\Notifications\ContestEntered;
 
-class radiostation_contestsController extends Controller
+class ContestsController extends Controller
 {
 
 
@@ -103,6 +103,30 @@ class radiostation_contestsController extends Controller
 
 		return response()->xml((string)$response);
 
+
+	}
+
+	public function getEntrant($uuid, Request $request){
+		//\dd($uuid);
+		try {
+			$item = RadiostationEntrants::where('uuid' , $uuid)->first();
+		}catch(\Exception $e){
+			return $this->errorNotFound("Record not found:");
+		}
+		$item->station_name = $item->station->name;
+		$item->contest_name = $item->contest->name;
+        return $this->respondWithOne($item->only('uuid','station_name','mobile','completed','contest_name','first_name','last_name','email','address1','address2'));
+	}
+
+	public function saveEntrantProfile($uuid, Request $request){
+		try {
+			$item = RadiostationEntrants::where('uuid' , $uuid)->first();
+		}catch(\Exception $e){
+			return $this->errorNotFound("Record not found:");
+		}
+		$item->fill($request->only(['first_name','last_name','email','address1','address2','opt_in','ipaddress']));
+		$item->save();
+		return $this->respondWithOne($item->only('uuid','station_name','mobile','completed','contest_name','first_name','last_name','email','address1','address2','opt_in'));
 
 	}
 

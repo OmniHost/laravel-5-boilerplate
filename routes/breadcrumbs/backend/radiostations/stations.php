@@ -38,3 +38,9 @@ Breadcrumbs::for('admin.contests.edit', function ($trail, $station) {
 	$trail->push("Radio Contests", route('admin.contests.index', $station));
 	$trail->push("Edit Contest");
 });
+
+
+Breadcrumbs::for('admin.entrants.index', function ($trail, $station, $contest) {
+	$trail->parent('admin.dashboard');
+	$trail->push("Radio Entrants", route('admin.entrants.index', [$station, $contest]));
+});

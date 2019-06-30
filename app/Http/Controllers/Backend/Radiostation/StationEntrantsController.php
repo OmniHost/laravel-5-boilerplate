@@ -5,9 +5,27 @@ namespace App\Http\Controllers\Backend\Radiostation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+
+use App\Repositories\Backend\Radiostations\StationContestEntrantsRepository;
+
 class StationEntrantsController extends Controller
 {
 
+
+	/**
+     * @var StationContestEntrantsRepository
+     */
+	protected $stationEntrantsRepository;
+
+	   /**
+     * UserController constructor.
+     *
+     * @param StationContestEntrantsRepository $stationEntrantsRepository
+     */
+    public function __construct(StationContestEntrantsRepository $stationEntrantsRepository)
+    {
+		$this->stationEntrantsRepository = $stationEntrantsRepository;
+    }
 
 
     /**
@@ -15,9 +33,18 @@ class StationEntrantsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(int $station, int $contest)
     {
-        //
+		//
+		return $this->_view('index')
+		->withStationId($station)
+		->withContestId($contest)
+		->withEntrants($this->stationEntrantsRepository->where('radiostation_contests_id', $contest)->where('completed',1)->paginate());
     }
 
     /**
@@ -81,8 +108,22 @@ class StationEntrantsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($stationId,$contestId, $entrantId){
+		$this->stationEntrantsRepository->deleteById($entrantId);
+		return redirect()->route('admin.entrants.index',[$stationId,$contestId])->withFlashSuccess('Contest Entrant Deleted');
+	}
+
+	/*public function destroy($stationId, $contestId)
     {
-        //
-    }
+		//
+
+		$this->stationContestsRepository->deleteById($contestId);
+
+        return redirect()->route('admin.contests.index',$stationId)->withFlashSuccess('Contest Deleted');
+	}*/
+
+	protected function _view($tpl){
+		return view('backend.radiostations.entrants.' . $tpl);
+	}
+
 }

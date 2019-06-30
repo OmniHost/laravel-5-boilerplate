@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\ActionButtons;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class Radiostation extends Model
 {
-	use ActionButtons;
+	use ActionButtons, Sluggable;
 	//
 	protected $fillable = ['name'];
 
@@ -20,6 +21,19 @@ class Radiostation extends Model
 		]
 	];
 
+	/**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
+	}
 
 	   /**
      * @return string

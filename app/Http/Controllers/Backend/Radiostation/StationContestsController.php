@@ -7,6 +7,15 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Backend\Radiostations\StationContestsRepository;
 use App\Repositories\Backend\Radiostations\StationsRepository;
 use App\Models\RadiostationContests;
+use App\Models\Upload;
+use Illuminate\Support\Facades\Storage;
+
+use Illuminate\Http\UploadedFile;
+use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
+use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
+use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
+use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
+use Illuminate\Http\File;
 
 class StationContestsController extends Controller
 {
@@ -72,6 +81,7 @@ class StationContestsController extends Controller
 		'enabled',
 		'unique_entrants',
 		'message',
+		'upload_id',
 		'start',
 		'end');
 		$data['radiostation_id'] = $station;
@@ -125,6 +135,7 @@ class StationContestsController extends Controller
 		'unique_entrants',
 		'message',
 		'start',
+		'upload_id',
 		'end');
 
 		$this->stationContestsRepository->updateById($contestId, $data);
@@ -151,4 +162,57 @@ class StationContestsController extends Controller
 	protected function _view($tpl){
 		return view('backend.radiostations.contests.' . $tpl);
 	}
+
+
+
+	public function upload(FileReceiver $receiver)
+{
+
+	// check if the upload is success, throw exception or return response you need
+	if ($receiver->isUploaded() === false) {
+		throw new UploadMissingFileException();
+	}
+	// receive the file
+	$save = $receiver->receive();
+	// check if the upload has finished (in chunk mode it will send smaller files)
+	if ($save->isFinished()) {
+		// save the file and return any response you need
+		return $this->saveFile($save->getFile());
+	}
+	// we are in chunk mode, lets send the current progress
+	/** @var AbstractHandler $handler */
+	$handler = $save->handler();
+	return response()->json([
+		"done" => $handler->getPercentageDone()
+	]);
+
+}
+
+protected function saveFile($uploadedFile){
+
+
+
+	  //$filename = new File()
+	  $original = $uploadedFile->getClientOriginalName();
+	  $filename = sha1(time()) . '.mp3';
+
+     $filename = Storage::disk('public')->putFileAs(
+        'callscripts',
+		$uploadedFile,
+		$filename
+      );
+
+      $upload = new Upload;
+	  $upload->filename = $filename;
+	  $upload->original = $original;
+
+      $upload->user()->associate(auth()->user());
+
+      $upload->save();
+
+      return response()->json([
+        'id' => $upload->id
+      ]);
+}
+
 }

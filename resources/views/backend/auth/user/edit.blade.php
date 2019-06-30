@@ -57,7 +57,17 @@
                                 ->attribute('maxlength', 191)
                                 ->required() }}
                         </div><!--col-->
-                    </div><!--form-group-->
+					</div><!--form-group-->
+
+					<div class="form-group row">
+						{{ html()->label('Radio Station')->class('col-md-2 form-control-label')->for('station_id') }}
+
+						<div class="col-md-10">
+
+								{{ html()->select('station_id', array_merge(['0' => 'none'], $stations->pluck('name','id')->toArray()), $radioStation ? $radioStation->radiostation_id : null, ['placeholder' => 'Assign to Radio Station'])->class('custom-select') }}
+
+						</div><!--col-->
+					</div><!--form-group-->
 
                     <div class="form-group row">
                         {{ html()->label('Abilities')->class('col-md-2 form-control-label') }}

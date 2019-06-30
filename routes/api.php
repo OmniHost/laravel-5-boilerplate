@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 
-use App\Http\Controllers\Api\radiostation_contestsController;
+use App\Http\Controllers\Api\ContestsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,5 +20,8 @@ use App\Http\Controllers\Api\radiostation_contestsController;
 });*/
 //Route::resource('radiostation_contests', 'Api\\radiostation_contestsController');
 
-Route::post('radiostation_contests/{id}', [radiostation_contestsController::class, 'incommingCall'])->where('id', '[0-9]+');
-Route::post('radiostation_contests/callstatus', [radiostation_contestsController::class, 'statusCall']);
+Route::post('radiostation_contests/{id}', [ContestsController::class, 'incommingCall'])->where('id', '[0-9]+');
+Route::post('radiostation_contests/callstatus', [ContestsController::class, 'statusCall']);
+
+Route::post('radiostation_entrant/update/{uuid}', [ContestsController::class, 'saveEntrantProfile']);
+Route::post('radiostation_entrant/{uuid}', [ContestsController::class, 'getEntrant']);

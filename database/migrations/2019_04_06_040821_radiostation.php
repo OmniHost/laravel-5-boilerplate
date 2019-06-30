@@ -17,6 +17,7 @@ class Radiostation extends Migration
 		Schema::create('radiostations', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->string('name');
+			$table->string('slug');
 			$table->string('logo')->nullable();
 			$table->string('color-primary')->nullable();
 			$table->string('color-secondary')->nullable();
@@ -48,6 +49,7 @@ class Radiostation extends Migration
 			$table->string('name');
 			$table->string('slug');
 			$table->text('message')->nullable();
+			$table->integer('upload_id');
 			$table->dateTime('start');
 			$table->dateTime('end');
 			$table->boolean('enabled');
@@ -61,12 +63,16 @@ class Radiostation extends Migration
 		Schema::create('radiostation_entrants', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->uuid('uuid');
-			$table->string('name');
-			$table->string('email');
+			$table->string('first_name')->nullable();
+			$table->string('last_name')->nullable();
+			$table->string('address1')->nullable();
+			$table->string('address2')->nullable();
+			$table->string('email')->nullable();
 			$table->string('mobile');
 			$table->string('recording');
 			$table->string('recording_url')->nullable();
 			$table->boolean('completed');
+			$table->boolean('optin');
 			$table->unsignedBigInteger('radiostation_contests_id');
 			$table->ipAddress('ipaddress');
 			$table->softDeletes();

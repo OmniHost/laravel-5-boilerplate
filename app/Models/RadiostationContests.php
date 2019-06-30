@@ -13,7 +13,7 @@ class RadiostationContests extends Model
 {
 	use ActionButtons, SoftDeletes, Sluggable;
 
-	protected $fillable = ['name','start','end','enabled','radiostation_id','unique_entrants','message'];
+	protected $fillable = ['name','start','end','enabled','radiostation_id','unique_entrants','message','upload_id'];
 
 	protected $buttons = [
 		'route' => 'admin.contests',
@@ -44,7 +44,7 @@ class RadiostationContests extends Model
      */
     public function getContestantsButtonAttribute()
     {
-        return '<a href="'.route('admin.contests.index', $this).'" class="btn btn-success"><i class="fas fa-list" data-toggle="tooltip" data-placement="top" title="'.__('Contestants').'"></i></a>';
+        return '<a href="'.route('admin.entrants.index', ['station' => $this->radiostation_id, 'contest' => $this->id]).'" class="btn btn-success"><i class="fas fa-list" data-toggle="tooltip" data-placement="top" title="'.__('Contestants').'"></i></a>';
     }
 
 	public function getStationAttribute($value)
@@ -91,5 +91,10 @@ class RadiostationContests extends Model
 			 data-trans-button-confirm="'.__('buttons.general.crud.delete').'"
 			 data-trans-title="'.__('strings.backend.general.are_you_sure').'"
 			 class="btn btn-danger"><i class="fas fa-trash" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.delete').'"></i></a> ';
-    }
+	}
+
+
+	public function upload(){
+		return $this->hasOne(Upload::class,'id','upload_id');
+	}
 }
