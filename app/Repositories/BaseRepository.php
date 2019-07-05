@@ -357,7 +357,25 @@ abstract class BaseRepository implements RepositoryContract
         $this->wheres[] = compact('column', 'value', 'operator');
 
         return $this;
-    }
+	}
+
+
+	public function whereLike($column, $value){
+		$value = '%' . $value . '%';
+		$operator = 'like';
+		$this->wheres[] = compact('column', 'value', 'operator');
+
+        return $this;
+	}
+
+
+	public function whereStartsWith($column, $value){
+		$value .=  '%';
+		$operator = 'like';
+		$this->wheres[] = compact('column', 'value', 'operator');
+
+        return $this;
+	}
 
     /**
      * Add a simple where in clause to the query.

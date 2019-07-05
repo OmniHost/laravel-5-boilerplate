@@ -10,7 +10,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\NexmoMessage;
 use Abstractrs\UrlShortener\Facades\UrlShortener;
 
-class ContestEntered extends Notification
+class ContestEntered extends Notification implements ShouldQueue
 {
     use Queueable;
 

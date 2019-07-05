@@ -7,20 +7,23 @@ use App\Models\Traits\ActionButtons;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Cviebrock\EloquentSluggable\Sluggable;
 
+use App\Models\RadiostationUsers;
+
 use App\Models\Radiostation;
 
 class RadiostationContests extends Model
 {
 	use ActionButtons, SoftDeletes, Sluggable;
 
-	protected $fillable = ['name','start','end','enabled','radiostation_id','unique_entrants','message','upload_id', 'image1', 'image2', 'image3', 'image4'];
+	protected $fillable = ['name','start','end','enabled','radiostation_id','unique_entrants','message','upload_id', 'image1', 'image2', 'image3', 'image4','shareimage1','shareimage2','shareimage3','shareimage4'];
 
 	protected $buttons = [
 		'route' => 'admin.contests',
 		'edit' => true,
 		'delete' => true,
 		'custom' => [
-			'getContestantsButtonAttribute'
+			'getContestantsButtonAttribute',
+			//'sendNotificationButtonAttribute'
 		]
 	];
 
@@ -47,6 +50,12 @@ class RadiostationContests extends Model
         return '<a href="'.route('admin.entrants.index', ['station' => $this->radiostation_id, 'contest' => $this->id]).'" class="btn btn-success"><i class="fas fa-list" data-toggle="tooltip" data-placement="top" title="'.__('Contestants').'"></i></a>';
     }
 
+
+	public function sendNotificationButtonAttribute(){
+		return '<a href="'.route('admin.notifications.index', ['station' => $this->radiostation_id, 'contest' => $this->id]).'" class="btn btn-info"><i class="fas fa-paper-plane" data-toggle="tooltip" data-placement="top" title="'.__('Contestants').'"></i></a>';
+	}
+
+
 	public function getStationAttribute($value)
 	{
 		return $this->attributes['radiostation_id'];
@@ -55,6 +64,20 @@ class RadiostationContests extends Model
 
 	public function getStation(){
 		return Radiostation::find($this->radiostation_id);
+	}
+
+	public function hasAccess(){
+		if(auth()->user()->isAdmin()){
+			return true;
+		}
+		$access = RadiostationUsers::where('user_id', auth()->user()->id)->where('radiostation_id', $this->radiostation_id)->count();
+		if($access > 0){
+			return true;
+		}
+
+		abort(403);
+
+		//if(!auth()->user()->isAdmin()){
 	}
 
 	/**
@@ -109,5 +132,18 @@ class RadiostationContests extends Model
 	}
 	public function imageFour(){
 		return $this->hasOne(Upload::class,'id','image4');
+	}
+
+	public function shareImageOne(){
+		return $this->hasOne(Upload::class,'id','shareimage1');
+	}
+	public function shareImageTwo(){
+		return $this->hasOne(Upload::class,'id','shareimage2');
+	}
+	public function shareImageThree(){
+		return $this->hasOne(Upload::class,'id','shareimage3');
+	}
+	public function shareImageFour(){
+		return $this->hasOne(Upload::class,'id','shareimage4');
 	}
 }

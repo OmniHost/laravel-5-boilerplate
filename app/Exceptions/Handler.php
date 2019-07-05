@@ -5,7 +5,8 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Spatie\Permission\Exceptions\UnauthorizedException;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+
+use Abrigham\LaravelEmailExceptions\Exceptions\EmailHandler as ExceptionHandler;
 
 /**
  * Class Handler.

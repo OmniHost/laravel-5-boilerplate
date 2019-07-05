@@ -49,7 +49,7 @@ class StationContestsController extends Controller
      */
     public function index(int $station)
     {
-		//
+
 		return $this->_view('index')
 		->withStationId($station)
 		->withContests($this->stationContestsRepository->where('radiostation_id', $station)->paginate());
@@ -84,8 +84,16 @@ class StationContestsController extends Controller
 		'upload_id',
 		'start',
 		'image1','image2','image3','image4',
+		'shareimage1','shareimage2','shareimage3','shareimage4',
 		'end');
 		$data['radiostation_id'] = $station;
+
+		if(!empty($data['start'])){
+			$data['start'] =  \Carbon\Carbon::createFromFormat("Y-m-d h:i a", $data['start']);
+		}
+		if(!empty($data['end'])){
+			$data['end'] =  \Carbon\Carbon::createFromFormat("Y-m-d h:i a", $data['end']);
+		}
 
 		$this->stationContestsRepository->create($data);
 
@@ -137,8 +145,16 @@ class StationContestsController extends Controller
 		'message',
 		'start',
 		'image1','image2','image3','image4',
+		'shareimage1','shareimage2','shareimage3','shareimage4',
 		'upload_id',
 		'end');
+
+		if(!empty($data['start'])){
+			$data['start'] =  \Carbon\Carbon::createFromFormat("Y-m-d h:i a", $data['start']);
+		}
+		if(!empty($data['end'])){
+			$data['end'] =  \Carbon\Carbon::createFromFormat("Y-m-d h:i a", $data['end']);
+		}
 
 		$this->stationContestsRepository->updateById($contestId, $data);
 

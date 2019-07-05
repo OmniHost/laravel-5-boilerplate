@@ -1,11 +1,14 @@
 import '@coreui/coreui'
 import 'jquery-validation'
+import 'pc-bootstrap4-datetimepicker'
+import 'select2';
+
 import Dropzone from 'dropzone'
 
 Dropzone.autoDiscover = false;
 window.Dropzone = Dropzone;
 
-console.log(Dropzone);
+
 
 jQuery.validator.setDefaults({
 	invalidHandler: function() {
@@ -256,3 +259,24 @@ var validator = $('form').not('.no-validate').validate({
 	    return document[hide];
 	}
 })(jQuery, window, document);
+
+$.extend(true, $.fn.datetimepicker.defaults, {
+    icons: {
+      time: 'far fa-clock',
+      date: 'far fa-calendar',
+      up: 'fas fa-arrow-up',
+      down: 'fas fa-arrow-down',
+      previous: 'fas fa-chevron-left',
+      next: 'fas fa-chevron-right',
+      today: 'fas fa-calendar-check',
+      clear: 'far fa-trash-alt',
+      close: 'far fa-times-circle'
+    }
+  });
+
+
+$('.datetimepicker').datetimepicker();
+
+$('.select2').select2({
+	theme: 'bootstrap4',
+});

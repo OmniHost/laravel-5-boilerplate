@@ -45,11 +45,17 @@ class StationsController extends Controller
 
 		$user = auth()->user();
 		$stations = $user->stations();
+
+		$stationId = $stations->first()->radiostation_id;
+
+		$station = $this->stationsRepository->getById($stationId);
+
+
 		if(empty($stations)){
 			throw new UnauthorizedException(400, 'Not Authorized to view this page');
 		}
 		return $this->_view('edit')
-		->withRadioStation($this->stationsRepository->getById(($stations->first()->id)));
+		->withRadioStation($station);
 
 	}
 
@@ -63,7 +69,9 @@ class StationsController extends Controller
     public function create()
     {
 		//
-		return $this->_view('create');
+		$timezones = \DateTimeZone::listIdentifiers();
+
+		return $this->_view('create')->withTimezones($timezones);
     }
 
     /**
@@ -75,7 +83,8 @@ class StationsController extends Controller
     public function store(Request $request)
     {
 		$this->stationsRepository->create($request->only(
-            'name'
+			'name',
+			'timezone'
         ));
 
         return redirect()->route('admin.stations.index')->withFlashSuccess('Station Created');
@@ -102,8 +111,10 @@ class StationsController extends Controller
     {
 		//print_r($radiostation->find($id)->name);exit;
 		//
+		$timezones = \DateTimeZone::listIdentifiers();
 		return $this->_view('edit')
-		->withRadioStation($radiostation->find($id));
+		->withRadioStation($radiostation->find($id))
+		->withTimezones($timezones);
     }
 
     /**
@@ -118,7 +129,8 @@ class StationsController extends Controller
 		//
 
 		$data = $request->only(
-            'name'
+			'name',
+			'timezone'
 		);
 		$this->stationsRepository->updateById($station_id, $data);
 

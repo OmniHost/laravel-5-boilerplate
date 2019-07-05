@@ -34,6 +34,20 @@
                                 ->required()
                                 ->autofocus() }}
                         </div><!--col-->
+					</div><!--form-group-->
+
+					<div class="form-group row">
+                        {{ html()->label('Station Name')
+                            ->class('col-md-2 form-control-label')
+                            ->for('name') }}
+
+                        <div class="col-md-10">
+                            {{ html()->select('timezone')
+                                ->class('form-control select2')
+								->required()
+								->options(array_combine($timezones, $timezones))
+								}}
+                        </div><!--col-->
                     </div><!--form-group-->
 
 

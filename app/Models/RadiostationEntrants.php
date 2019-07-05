@@ -30,11 +30,12 @@ class RadiostationEntrants extends Model
 	];
 
 	protected $attributes = [
-		'name' => '',
+		'first_name' => '',
 		'email' => '',
 		'ipaddress' => '',
 		'completed' => 0,
-		'recording_url' => ''
+		'recording_url' => '',
+		'optin' => 0
 	];
 
 
@@ -61,6 +62,11 @@ class RadiostationEntrants extends Model
 	public function routeNotificationForNexmo($notification)
     {
         return $this->mobile;
+	}
+
+	public function routeNotificationForMail($notification)
+    {
+        return $this->email;
 	}
 
 	public function contest()

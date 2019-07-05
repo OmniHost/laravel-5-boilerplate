@@ -10,7 +10,7 @@ class Radiostation extends Model
 {
 	use ActionButtons, Sluggable;
 	//
-	protected $fillable = ['name'];
+	protected $fillable = ['name','timezone'];
 
 	protected $buttons = [
 		'route' => 'admin.stations',

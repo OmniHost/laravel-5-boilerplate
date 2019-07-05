@@ -18,7 +18,7 @@ use App\Http\Controllers\Api\ContestsController;
 /*Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });*/
-//Route::resource('radiostation_contests', 'Api\\radiostation_contestsController');
+//Route::resource('radiostation_contests', 'Api\\ContestsController');
 
 Route::post('radiostation_contests/{id}', [ContestsController::class, 'incommingCall'])->where('id', '[0-9]+');
 Route::post('radiostation_contests/callstatus', [ContestsController::class, 'statusCall']);

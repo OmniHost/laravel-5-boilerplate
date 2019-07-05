@@ -57,7 +57,15 @@ return [
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
         'name' => env('MAIL_FROM_NAME', 'Example'),
-    ],
+	],
+
+	// /**
+	//  * If Environment
+	//  */
+	// 'to' => [
+	// 	'address' => 'example@example.com',
+	// 	'name' => 'Example'
+	// ],
 
     /*
     |--------------------------------------------------------------------------

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Backend\Radiostation\NotificationsController;
 
 /*
  * Global Routes
@@ -19,9 +20,12 @@ Route::group(['namespace' => 'Frontend', 'as' => 'frontend.'], function () {
 	include_route_files(__DIR__.'/frontend/');
 
 	Route::get('entrant/{uuid}',[HomeController::class, 'entrant'])->name('entrant.shareurl');
+	Route::get('i/could/be/next/{uuid}',[HomeController::class, 'entrant'])->name('entrant.icouldbenext');
  	Route::get('entries/{stationSlug}/{contestSlug}/{uuid}', [HomeController::class, 'entry'])->name('entryurl');
 
 });
+
+Route::get('sendblast', [NotificationsController::class, 'processQueue']);
 
 /*
  * Backend Routes

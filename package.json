@@ -65,6 +65,8 @@
         "node": ">=6.0.0"
     },
     "dependencies": {
-        "dropzone": "^5.5.1"
+        "dropzone": "^5.5.1",
+        "pc-bootstrap4-datetimepicker": "^4.17.50",
+        "select2": "^4.0.7"
     }
 }

@@ -11,6 +11,11 @@ use Illuminate\Http\Request;
 
 use Illuminate\Notifications\Notification;
 use App\Notifications\ContestEntered;
+use App\Notifications\ContestProfileCompleted;
+
+use SparkPost\SparkPost;
+use GuzzleHttp\Client;
+use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
 
 class ContestsController extends Controller
 {
@@ -37,6 +42,13 @@ class ContestsController extends Controller
 	}
 
 	public function index(){
+
+		$entry = RadiostationEntrants::find(5);
+	//	$r = $entry->notify(new ContestProfileCompleted($entry));
+
+		return (new ContestProfileCompleted($entry))
+		->toMail($entry);
+
 		return $this->errorForbidden();
 	}
 
@@ -90,7 +102,7 @@ class ContestsController extends Controller
 		try {
 			$entrant->save();
 		}catch(\Exception $e){
-			Log::error($e->getMessage);
+			Log::error($e->getMessage());
 			$response->say('Hello. There was an issue with this call, please try again later.',array('voice' => 'man'));
 			$response->hangup();
 			return response()->xml((string)$response);
@@ -123,6 +135,13 @@ class ContestsController extends Controller
 		$contest = $item->contest->only(['name', 'message']);
 		$contest['images'] = [];
 		foreach(['image1' => 'imageOne','image2'=> 'imageTwo','image3' => 'imageThree','image4' => 'imageFour'] as $img => $imgCall){
+			if(!empty($item->contest->{$img})){
+				$contest['images'][$item->contest->{$img}] = $item->contest->{$imgCall}->url();
+			}
+		}
+
+		$contest['shareimages'] = [];
+		foreach(['shareimage1' => 'shareImageOne','shareimage2'=> 'shareImageTwo','shareimage3' => 'shareImageThree','shareimage4' => 'shareImageFour'] as $img => $imgCall){
 			if(!empty($item->contest->{$img})){
 				$contest['images'][$item->contest->{$img}] = $item->contest->{$imgCall}->url();
 			}

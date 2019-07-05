@@ -4,9 +4,14 @@ namespace App\Http\Controllers\Backend\Radiostation;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-
+use App\Models\RadiostationContests;
+use App\Models\RadiostationEntrants;
 use App\Repositories\Backend\Radiostations\StationContestEntrantsRepository;
+
+
+use SparkPost\SparkPost;
+use GuzzleHttp\Client;
+use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
 
 class StationEntrantsController extends Controller
 {
@@ -28,6 +33,8 @@ class StationEntrantsController extends Controller
     }
 
 
+
+
     /**
      * Display a listing of the resource.
      *
@@ -38,69 +45,76 @@ class StationEntrantsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(int $station, int $contest)
+    public function index(int $station, RadiostationContests $contest, Request $request)
     {
+
+
+		$contest->hasAccess();
+
+		
+
+		$entrants = $this->stationEntrantsRepository->where('radiostation_contests_id', $contest->id)->where('completed',1);
+
+		//$sort:
+		$sorts = [
+			'first_name',
+			'last_name',
+			'mobile',
+			'email',
+			'address1',
+			'address2',
+			'created_at'
+		];
+
+		$sort = in_array($request->input('sort'), $sorts) ? $request->input('sort') : 'created_at';
+		$dir = $request->input('order') == 'desc' ? 'asc' : 'desc';
+
+		$entrants->orderBy($sort, $dir);
+
+		$filters = $request->input('filter');
+
+
+		if($filters){
+
+			foreach($filters as $fld => $val){
+				if(!empty($val)){
+					$entrants->whereStartsWith($fld, $val );
+				}
+			}
+		}
+
+
+		$sortLink = function($column, $label) use ($request, $station, $contest, $sort, $dir, $filters) {
+
+			$page = $request->input('page') ? (int)$request->input('page') : 1;
+
+			$class = ['sort-by'];
+			$order = 'desc';
+
+			if($sort == $column){
+				$class[] = $dir;
+				$order = $dir;
+			}
+
+			$route = route('admin.entrants.index', ['station' => $station, 'contest' => $contest, 'filter' => $filters, 'sort' => $column, 'order'=> $order, 'page' => $page]);
+
+
+			return html()->a($route , $label)->class($class);
+		};
+
+
 		//
 		return $this->_view('index')
+		->withSuburbs(RadiostationEntrants::select('address1', \DB::raw('count(*) as total'))->where('completed',1)->where('radiostation_contests_id', $contest->id)->groupBy('address1')->orderBy('total','desc')->get())
+		->withInitials(RadiostationEntrants::select( \DB::raw('concat_ws(" ", LEFT(first_name,1), LEFT(last_name,1)) as initials, count(*) as total'))->where('completed',1)->where('radiostation_contests_id', $contest->id)->groupBy(\DB::raw('concat_ws(" ", LEFT(first_name,1), LEFT(last_name,1))'))->orderBy('total','desc')->get())
+		->withFormLink(route('admin.entrants.index', ['station' => $station, 'contest' => $contest]))
+		->withSortLink($sortLink)
 		->withStationId($station)
 		->withContestId($contest)
-		->withEntrants($this->stationEntrantsRepository->where('radiostation_contests_id', $contest)->where('completed',1)->paginate());
-    }
+		->withFilter($filters)
+		->withEntrants($entrants->paginate());
+	}
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -108,19 +122,11 @@ class StationEntrantsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($stationId,$contestId, $entrantId){
+    public function destroy($stationId,RadiostationContests $contestId, $entrantId){
+		$contest->hasAccess();
 		$this->stationEntrantsRepository->deleteById($entrantId);
 		return redirect()->route('admin.entrants.index',[$stationId,$contestId])->withFlashSuccess('Contest Entrant Deleted');
 	}
-
-	/*public function destroy($stationId, $contestId)
-    {
-		//
-
-		$this->stationContestsRepository->deleteById($contestId);
-
-        return redirect()->route('admin.contests.index',$stationId)->withFlashSuccess('Contest Deleted');
-	}*/
 
 	protected function _view($tpl){
 		return view('backend.radiostations.entrants.' . $tpl);

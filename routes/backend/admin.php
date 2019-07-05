@@ -3,6 +3,7 @@
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\Radiostation\StationsController;
 use App\Http\Controllers\Backend\Radiostation\StationEntrantsController;
+use App\Http\Controllers\Backend\Radiostation\NotificationsController;
 
 
 // All route names are prefixed with 'admin.'.
@@ -18,5 +19,8 @@ Route::group(['namespace' => 'Radiostation'], function () {
 	Route::get('entrant/mp3/{uuid}', [StationEntrantsController::class, 'download'])->name('entrants.download');
 	Route::resource('/radiostations/stations', 'StationsController');
 	Route::resource('/radiostations/stations/{station}/contests', 'StationContestsController');
+	Route::resource('/radiostations/stations/{station}/contest/{contest}/notifications', 'NotificationsController');
 	Route::resource('/radiostations/stations/{station}/contest/{contest}/entrants', 'StationEntrantsController');
+
+	Route::post('/ajax/mailblast/{contest}', [NotificationsController::class, 'index'])->name('entrants.mailblast');
 });
