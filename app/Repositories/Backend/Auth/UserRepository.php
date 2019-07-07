@@ -126,7 +126,7 @@ class UserRepository extends BaseRepository
 				$user->syncPermissions($data['permissions']);
 
 				//add the user radio station
-				if($data['station_id']){
+				if(isset($data['station_id']) && !empty($data['station_id'])){
 					$user->stations()->create([ 'radiostation_id' => $data['station_id']]);
 				}
 

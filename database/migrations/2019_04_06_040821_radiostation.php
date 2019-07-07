@@ -49,7 +49,7 @@ class Radiostation extends Migration
 			$table->string('name');
 			$table->string('slug');
 			$table->text('message')->nullable();
-			$table->integer('upload_id');
+			$table->integer('upload_id')->nullable();
 			$table->dateTime('start');
 			$table->dateTime('end');
 			$table->boolean('enabled');

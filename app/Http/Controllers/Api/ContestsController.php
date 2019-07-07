@@ -61,17 +61,7 @@ class ContestsController extends Controller
 			$item = false;
 		}
 
-		//Silly system sends straight back here with the recording url:
-		$recording = $request->input('CallSid');
-		$entry = RadiostationEntrants::where('recording',$recording)->first();
-		if($entry){
-			$entry->recording_url = $request->input('RecordingUrl') . '.mp3';
-			$entry->save();
 
-			//Now we need to notify!
-			$entry->notify(new ContestEntered($entry));
-			return response()->xml((string)$entry->uuid);
-		}
 
 
 		$now = \Carbon\Carbon::now();
@@ -83,6 +73,21 @@ class ContestsController extends Controller
 
 			return response()->xml((string)$response);
 
+		}
+
+		//Silly system sends straight back here with the recording url:
+		$recording = $request->input('CallSid');
+		if($recording){
+
+			$entry = RadiostationEntrants::where('recording',$recording)->first();
+			if($entry){
+				$entry->recording_url = $request->input('RecordingUrl') . '.mp3';
+				$entry->save();
+
+				//Now we need to notify!
+				$entry->notify(new ContestEntered($entry));
+				return response()->xml((string)$entry->uuid);
+			}
 		}
 
 		if($item->unique_entrants == '1'){
