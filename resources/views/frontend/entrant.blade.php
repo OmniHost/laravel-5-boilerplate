@@ -12,7 +12,7 @@
 	</head>
 	<body>
 		<div style="text-align:center">
-		<img style="max-width:100%" src="{{ $entrant->shareImage->url() }}" />
+			<img style="max-width:100%" src="{{ $entrant->shareImage->url() }}" />
 		</div>
 	</body>
 </html>
