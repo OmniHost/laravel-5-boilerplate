@@ -69,7 +69,7 @@ class Radiostation extends Migration
 			$table->string('address2')->nullable();
 			$table->string('email')->nullable();
 			$table->string('mobile');
-			$table->string('recording');
+			$table->string('recording')->nullable();
 			$table->string('recording_url')->nullable();
 			$table->boolean('completed');
 			$table->boolean('optin');
