@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="icon" href="/favicon.ico" />
-    <title>Jacaranda FM</title>
+    <title>One in a Million Listener</title>
     <meta name="apple-mobile-web-app-title" content="React Boilerplate" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -39,7 +39,7 @@
     </script>
     <script type="text/javascript" src="/assets/jacaranda/npm.intl-relativeformat.4c4e7672d573e68f9952.chunk.js">
     </script>
-    <script type="text/javascript" src="/assets/jacaranda/main.a0688942c52df6b1e5b0.chunk.js"></script>
+    <script type="text/javascript" src="/assets/jacaranda/main.8e816a289fae309ce77e.chunk.js"></script>
 </body>
 
 </html>
