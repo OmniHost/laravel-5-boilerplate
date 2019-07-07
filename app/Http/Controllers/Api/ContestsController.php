@@ -148,7 +148,7 @@ class ContestsController extends Controller
 		$contest['shareimages'] = [];
 		foreach(['shareimage1' => 'shareImageOne','shareimage2'=> 'shareImageTwo','shareimage3' => 'shareImageThree','shareimage4' => 'shareImageFour'] as $img => $imgCall){
 			if(!empty($item->contest->{$img})){
-				$contest['images'][$item->contest->{$img}] = $item->contest->{$imgCall}->url();
+				$contest['shareimages'][$item->contest->{$img}] = $item->contest->{$imgCall}->url();
 			}
 		}
 
