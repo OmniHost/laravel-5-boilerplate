@@ -1,12 +1,18 @@
 <html>
+
 	<head>
-		<meta property="og:url"                content="http://www.nytimes.com/2015/02/19/arts/international/when-great-minds-dont-think-alike.html" />
-		<meta property="og:type"               content="article" />
-		<meta property="og:title"              content="When Great Minds Don’t Think Alike" />
-		<meta property="og:description"        content="How much does culture influence creative thinking?" />
-		<meta property="og:image"              content="{{ $entrant->shareImage->url() }}" />
+		<meta charset="UTF-8">
+		@include('social::meta-article', [
+			'title'         => $entrant->first_name . '\'s One in a Million Entry',
+			'description'   => $entrant->contest->message,
+			'image'         => $entrant->shareImage->url(),
+			'author'        => $entrant->station->name
+		])
+		<title>{{  $entrant->first_name }}'s One in a Million Entry</title>
 	</head>
 	<body>
-		<img src="{{ $entrant->shareImage->url() }}" />
+		<div style="text-align:center">
+		<img style="max-width:100%" src="{{ $entrant->shareImage->url() }}" />
+		</div>
 	</body>
 </html>

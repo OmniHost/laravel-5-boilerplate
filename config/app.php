@@ -193,6 +193,7 @@ return [
 		App\Providers\RouteServiceProvider::class,
 
 		Abstractrs\UrlShortener\UrlShortenerServiceProvider::class,
+		SetKyar\Social\SocialServiceProvider::class,
     ],
 
     /*
